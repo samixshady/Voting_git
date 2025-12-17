@@ -1,0 +1,33 @@
+<div class="modal fade" id="profile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title"><b>Voter Profile</b></h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tr>
+            <th>First Name</th>
+            <td>{{ decrypted_first_name }}</td>
+          </tr>
+          <tr>
+            <th>Last Name</th>
+            <td>{{ decrypted_last_name }}</td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{{ decrypted_email }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal">
+          <i class="fa fa-close"></i> Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
