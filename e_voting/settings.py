@@ -27,6 +27,11 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://secure-voting.up.railway.app',
+]
+
+
 
 # Application definition
 
