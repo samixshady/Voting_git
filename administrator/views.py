@@ -8,7 +8,6 @@ from django.http import JsonResponse, HttpResponse
 from django.conf import settings
 from caesers import caesar_decrypt
 import json  # Not used
-from django_renderpdf.views import PDFView
 from django.views.generic import TemplateView
 
 
@@ -35,11 +34,6 @@ def find_n_winners(data, n):
 
 class PrintView(TemplateView):
     template_name = 'admin/print.html'
-    prompt_download = True
-
-    @property
-    def download_name(self):
-        return "result.pdf"
 
     def get_context_data(self, *args, **kwargs):
         title = "E-voting"

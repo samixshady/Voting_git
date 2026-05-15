@@ -2,7 +2,6 @@ Django
 mysql-connector==2.2.9
 virtualenv==20.0.31
 Pillow
-django-renderpdf
 requests
 gunicorn==21.2.0
 whitenoise==6.6.0
