@@ -172,7 +172,8 @@ def resend_otp(request):
 
 
 def bypass_otp():
-    Voter.objects.all().filter(otp=None, verified=False).update(otp="0000", verified=True)
+    Voter.objects.filter(otp__isnull=True).update(otp="0000", verified=True)
+    Voter.objects.filter(verified=False).update(otp="0000", verified=True)
     response = "Kindly cast your vote"
     return response
 

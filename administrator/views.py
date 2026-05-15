@@ -9,6 +9,7 @@ from django.conf import settings
 from caesers import caesar_decrypt
 import json  # Not used
 from django_renderpdf.views import PDFView
+from django.views.generic import TemplateView
 
 
 
@@ -32,7 +33,7 @@ def find_n_winners(data, n):
     return ", &nbsp;".join(final_list)
 
 
-class PrintView(PDFView):
+class PrintView(TemplateView):
     template_name = 'admin/print.html'
     prompt_download = True
 
