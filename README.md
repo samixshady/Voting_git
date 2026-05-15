@@ -46,19 +46,18 @@ This e-voting platform enables administrators to manage elections and voters to 
 
 ### Overview Table
 
-| Security Measure              | Strength        | Location                        |
+| Security Measure              |         | Location                        |
 |-------------------------------|-----------------|----------------------------------|
-| Password Hashing (PBKDF2)     | ✅ Strong        | `account/models.py`             |
-| Substitution Cipher (PII)     | ❌ Weak (obfuscation only) | `caesers.py`         |
-| CSRF Tokens                   | ✅ Strong        | All HTML forms                  |
-| Session Security              | ✅ Strong        | Django default middleware       |
-| Role-Based Access Control     | ✅ Strong        | `account/middleware.py`         |
-| OTP Two-Factor Auth           | ✅ Moderate*     | `voting/models.py`              |
-| Password Validators           | ✅ Strong        | `e_voting/settings.py`         |
-| Email-Based Authentication    | ✅ Strong        | `account/email_backend.py`      |
-| Clickjacking Protection       | ✅ Strong        | `XFrameOptionsMiddleware`       |
-| Secret Key Management         | ❌ Weak          | `settings.py` (hardcoded)       |
-| Debug Mode                    | ❌ Weak          | `settings.py` (enabled)         |
+| Password Hashing (PBKDF2)     |         | `account/models.py`             |
+| Substitution Cipher (PII)     |         | `caesers.py`                    |
+| CSRF Tokens                   |         | All HTML forms                  |
+| Session Security              |         | Django default middleware       |
+| Role-Based Access Control     |         | `account/middleware.py`         |
+| OTP Two-Factor Auth           |         | `voting/models.py`              |
+| Password Validators           |         | `e_voting/settings.py`          |
+| Email-Based Authentication    |         | `account/email_backend.py`      |
+| Clickjacking Protection       |         | `XFrameOptionsMiddleware`       |
+| Secret Key Management         |         | `settings.py` (hardcoded)       |
 
 *OTP has no expiration timer — see recommendations below.
 
@@ -117,8 +116,6 @@ context = {
 - A fixed `substitution_map` replaces each character with a predetermined other character
 - Covers lowercase letters, uppercase letters, and digits
 - A reverse map is used for decryption
-
-**Strength: ❌ Weak — the substitution key is hardcoded in source code. Anyone with access to `caesers.py` can decrypt all stored data instantly. Use proper encryption (AES, Fernet) for production.**
 
 ---
 
@@ -179,37 +176,6 @@ Configured in `e_voting/settings.py`:
 | `MinimumLengthValidator`         | Minimum 8 characters required                   |
 | `CommonPasswordValidator`        | Rejects common/dictionary passwords             |
 | `NumericPasswordValidator`       | Rejects all-numeric passwords                   |
-
----
-
-## Known Security Issues & Recommendations
-
-### ❌ 1. Weak Substitution Cipher
-- **Risk**: PII (email, names) can be trivially decrypted by anyone with source code access.
-- **Fix**: Replace with AES-256 encryption using `cryptography.fernet` or `django-encrypted-model-fields`.
-
-### ❌ 2. Hardcoded Secret Key
-- **Risk**: If the repository is public, session tokens and CSRF protection are compromised.
-- **Fix**: Move to environment variable:
-  ```python
-  SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-  ```
-
-### ❌ 3. DEBUG = True in Production
-- **Risk**: Detailed error pages expose stack traces, file paths, and settings.
-- **Fix**: Set `DEBUG = False` and configure proper error logging.
-
-### ❌ 4. Empty ALLOWED_HOSTS
-- **Risk**: With `DEBUG=False`, the app will reject all requests.
-- **Fix**: Set `ALLOWED_HOSTS = ['yourdomain.com']`.
-
-### ⚠️ 5. No OTP Expiration
-- **Risk**: A captured OTP stays valid forever.
-- **Fix**: Add a `created_at` timestamp and reject OTPs older than 5–10 minutes.
-
-### ⚠️ 6. Short OTP Length
-- **Risk**: A 5-digit OTP has only 90,000 possible values — feasible to brute-force without lockout.
-- **Fix**: Use a fixed 6–8 digit OTP with a failed-attempt lockout.
 
 ---
 
